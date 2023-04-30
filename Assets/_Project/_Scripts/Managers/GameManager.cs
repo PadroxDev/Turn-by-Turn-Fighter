@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 namespace Padrox
 {
@@ -9,24 +10,27 @@ namespace Padrox
         [SerializeField] private float _startDelay = 5f;
 
         public GameObject GuardianPlaceholder;
+        public GameObject FoePlaceholder;
         [SerializeField] private Transform _guardiansParent;
         [SerializeField] private Transform _foesParent;
 
         public Transform _guardianSlotsHolder;
         public Transform _foeSlotsHolder;
 
-        private Transform[] _guardianSlots;
+        public Transform[] _guardianSlots;
         private Transform[] _foeSlots;
 
         private List<IGuardian> _summonedGuardians;
+        private List<IFoe> _summonedFoes;
         private bool _fighting = true;
 
         private void Awake()
         {
-            _guardianSlots = _guardianSlotsHolder.GetComponentsInChildren<Transform>();
-            _foeSlots = _foeSlotsHolder.GetComponentsInChildren<Transform>();
+            _guardianSlots = _guardianSlotsHolder.GetComponentsInChildren<Transform>().Where(slot => slot != _guardianSlotsHolder).ToArray();
+            _foeSlots = _foeSlotsHolder.GetComponentsInChildren<Transform>().Where(slot => slot != _foeSlotsHolder).ToArray();
 
             _summonedGuardians = new List<IGuardian>();
+            _summonedFoes = new List<IFoe>();
         }
 
         void Start() {
@@ -41,20 +45,31 @@ namespace Padrox
             // Spawn the guardians
             SummonGuardians();
 
+            // Spawn the foes
+            for (int i = 0; i < 2; i++)
+            {
+                SummonFoes(i);
+            }
+
             // Activate passive effects of every guardians
             EnableGuardiansPassiveEffects();
 
-            int i = 0;
+            // Activate passive effects of every foes
+            EnableFoesPassiveEffects();
+
             while (_fighting)
             {
-                i++;
                 TriggerGuardiansPerform();
-                if (i > 3)
-                    _fighting = false;
+                TriggerFoesPerform();
+                _fighting = false;
             }
 
             _summonedGuardians[0].DisablePassiveEffects();
+            _summonedFoes[0].DisablePassiveEffects();
+            _summonedFoes[1].DisablePassiveEffects();
             _summonedGuardians[0].Die();
+            _summonedFoes[0].Die();
+            _summonedFoes[1].Die();
         }
 
         private void SummonGuardians()
@@ -74,6 +89,23 @@ namespace Padrox
             _summonedGuardians.Add(i_guardian);
         }
 
+        private void SummonFoes(int i)
+        {
+            Vector3 pos = _foeSlots[i].position;
+            Quaternion rot = _foeSlots[i].rotation;
+            var foe = Instantiate(FoePlaceholder, pos, rot, _foesParent);
+
+            if (foe == null)
+            {
+                Debug.Log("Encountered an error while instantiating the foe!");
+            }
+
+            IFoe i_foe = foe.GetComponent<IFoe>();
+            i_foe.Init();
+
+            _summonedFoes.Add(i_foe);
+        }
+
         private void EnableGuardiansPassiveEffects()
         {
             foreach (IGuardian guardian in _summonedGuardians)
@@ -82,11 +114,27 @@ namespace Padrox
             }
         }
 
+        private void EnableFoesPassiveEffects()
+        {
+            foreach (IFoe foe in _summonedFoes)
+            {
+                foe.EnablePassiveEffects();
+            }
+        }
+
         private void TriggerGuardiansPerform()
         {
             foreach (IGuardian guardian in _summonedGuardians)
             {
                 guardian.Perform(null);
+            }
+        }
+
+        private void TriggerFoesPerform()
+        {
+            foreach (IFoe foe in _summonedFoes)
+            {
+                foe.Perform(null);
             }
         }
     }
