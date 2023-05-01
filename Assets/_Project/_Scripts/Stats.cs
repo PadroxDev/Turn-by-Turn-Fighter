@@ -37,12 +37,17 @@ namespace Padrox
             _currentHealth = _maxHealth;
         }
 
-        private void TakeDamage(int damage)
+        private void TakeDamage(int amount)
         {
-            _currentHealth -= damage;
+            _currentHealth -= amount;
             if (_currentHealth <= 0)
             {
             }
+        }
+
+        private void Heal(int amount)
+        {
+            _currentHealth = Mathf.Clamp(_currentHealth + amount, 0, _maxHealth);
         }
 
         public int GetMitigatedDamage(int dmg, int resistance)
