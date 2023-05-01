@@ -1,26 +1,33 @@
+using System.Collections.Generic;
+using System.Timers;
 using UnityEngine;
 
 namespace Padrox
 {
-    public class SquareGuardian : MonoBehaviour, IGuardian
+    public class SquareGuardian : BaseGuardian
     {
-        public void Init()
+        public override void Init()
         {
+            base.Init();
         }
-        public void EnablePassiveEffects()
+        public override void EnablePassiveEffects()
         {
+
         }
 
-        public void Perform(Transform target)
+        public override void Perform()
         {
+
         }
 
-        public void Die()
+        public override void DisablePassiveEffects()
         {
+
         }
 
-        public void DisablePassiveEffects()
+        public override void Die()
         {
+            base.Die();
         }
     }
 }

@@ -19,6 +19,12 @@ namespace Padrox
         [SerializeField] private int _armor = 30;
         [SerializeField] private int _magicCloak = 30;
 
+        // Getters
+        public float ActionSpeed => _actionSpeed;
+        public float Power => _power;
+        public float Armor => _armor;
+        public float MagicCloak => _magicCloak;
+
         // Events
         public Action OnDeath;
         
