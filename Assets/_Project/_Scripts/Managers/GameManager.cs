@@ -21,7 +21,7 @@ namespace Padrox
         private Transform[] _foeSlots;
 
         private List<IGuardian> _summonedGuardians;
-        private List<IFoe> _summonedFoes;
+        private List<BaseFoe> _summonedFoes;
         private bool _fighting = true;
 
         private void Awake()
@@ -30,7 +30,7 @@ namespace Padrox
             _foeSlots = _foeSlotsHolder.GetComponentsInChildren<Transform>().Where(slot => slot != _foeSlotsHolder).ToArray();
 
             _summonedGuardians = new List<IGuardian>();
-            _summonedFoes = new List<IFoe>();
+            _summonedFoes = new List<BaseFoe>();
         }
 
         void Start() {
@@ -69,7 +69,6 @@ namespace Padrox
             _summonedFoes[1].DisablePassiveEffects();
             _summonedGuardians[0].Die();
             _summonedFoes[0].Die();
-            _summonedFoes[1].Die();
         }
 
         private void SummonGuardians()
@@ -100,7 +99,7 @@ namespace Padrox
                 Debug.Log("Encountered an error while instantiating the foe!");
             }
 
-            IFoe i_foe = foe.GetComponent<IFoe>();
+            BaseFoe i_foe = foe.GetComponent<BaseFoe>();
             i_foe.Init();
 
             _summonedFoes.Add(i_foe);
@@ -116,7 +115,7 @@ namespace Padrox
 
         private void EnableFoesPassiveEffects()
         {
-            foreach (IFoe foe in _summonedFoes)
+            foreach (BaseFoe foe in _summonedFoes)
             {
                 foe.EnablePassiveEffects();
             }
@@ -132,7 +131,7 @@ namespace Padrox
 
         private void TriggerFoesPerform()
         {
-            foreach (IFoe foe in _summonedFoes)
+            foreach (BaseFoe foe in _summonedFoes)
             {
                 foe.Perform(null);
             }

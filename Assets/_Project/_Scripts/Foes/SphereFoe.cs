@@ -2,31 +2,32 @@ using UnityEngine;
 
 namespace Padrox
 {
-    public class SphereFoe : MonoBehaviour, IFoe
+    public class SphereFoe : BaseFoe
     {
-        public void Init()
+        public override void Init()
         {
-            Debug.Log("Foe is initiating");
+            base.Init();
+            Damage _initDamage = new Damage();
+            _initDamage.amount = 200;
+            _initDamage.type = DamageType.Physical;
+            stats.ReceiveDamage(_initDamage);
         }
 
-        public void EnablePassiveEffects()
+        public override void EnablePassiveEffects()
         {
-            Debug.Log("Enabling every foe's passive effects");
         }
 
-        public void Perform(Transform target)
+        public override void Perform(Transform target)
         {
-            Debug.Log("Foe's performing!");
         }
 
-        public void DisablePassiveEffects()
+        public override void DisablePassiveEffects()
         {
-            Debug.Log("Enabling every foe's passive effects");
         }
 
-        public void Die()
+        public override void Die()
         {
-            Debug.Log("Foe's dying");
+            base.Die();
         }
     }
 }

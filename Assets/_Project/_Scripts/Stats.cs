@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Padrox
 {
@@ -18,16 +19,23 @@ namespace Padrox
         [SerializeField] private int _armor = 30;
         [SerializeField] private int _magicCloak = 30;
 
+        // Events
+        public Action OnDeath;
+        
         private int _currentHealth;
 
-        private void Start()
+        private void Awake()
         {
             _currentHealth = _maxHealth;
         }
 
-        public void TakeDamage(int damage)
+        private void TakeDamage(int damage)
         {
             _currentHealth -= damage;
+            if (_currentHealth <= 0)
+            {
+                Die();
+            }
         }
 
         public int GetMitigatedDamage(int dmg, int resistance)
@@ -35,10 +43,10 @@ namespace Padrox
             float mitigatedRate = 0f;
             if (resistance >= 0)
             {
-                mitigatedRate = 100 / (100 + resistance);
+                mitigatedRate = 100 / (100 + (float)resistance);
             } else
             {
-                mitigatedRate = 2 - 100 / (100 - resistance);
+                mitigatedRate = 2 - 100 / (100 - (float)resistance);
             }
 
             int damage = Mathf.RoundToInt(dmg * mitigatedRate);
@@ -47,7 +55,7 @@ namespace Padrox
 
         public int ReceiveDamage(Damage damage)
         {
-            int mitigatedDamage = GetMitigatedDamage(damage.amount, _armor);
+            int mitigatedDamage = 0;
             switch (damage.type)
             {
                 case DamageType.Physical:
@@ -61,10 +69,15 @@ namespace Padrox
                     break;
             }
 
-            int damageTaken = Mathf.Max(_currentHealth, mitigatedDamage);
-            TakeDamage(damageTaken);
+            int finalDamage = Mathf.Min(_currentHealth, mitigatedDamage);
+            TakeDamage(finalDamage);
 
-            return damageTaken;
+            return finalDamage;
+        }
+
+        private void Die()
+        {
+            OnDeath?.Invoke();
         }
     }
 
