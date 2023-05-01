@@ -13,7 +13,7 @@ namespace Padrox
             stats.OnDeath += Die;
         }
         public abstract void EnablePassiveEffects();
-        public abstract void Perform(Transform target);
+        public abstract void Perform();
         public abstract void DisablePassiveEffects();
         public virtual void Die()
         {

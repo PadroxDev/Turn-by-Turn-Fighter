@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Padrox.Helpers;
 
 namespace Padrox
 {
-    public class GameManager : MonoBehaviour
+    public class GameManager : Singleton<GameManager>
     {
         [SerializeField] private float _startDelay = 5f;
 
@@ -24,8 +25,13 @@ namespace Padrox
         private List<BaseFoe> _summonedFoes;
         private bool _fighting = true;
 
-        private void Awake()
+        // Getters
+        public BaseGuardian[] Guardians => _summonedGuardians.ToArray();
+        public BaseFoe[] Foes => _summonedFoes.ToArray();
+
+        protected override void Awake()
         {
+            base.Awake();
             _guardianSlots = _guardianSlotsHolder.GetComponentsInChildren<Transform>().Where(slot => slot != _guardianSlotsHolder).ToArray();
             _foeSlots = _foeSlotsHolder.GetComponentsInChildren<Transform>().Where(slot => slot != _foeSlotsHolder).ToArray();
 
@@ -60,6 +66,7 @@ namespace Padrox
             while (_fighting)
             {
                 TriggerGuardiansPerform();
+                TriggerGuardiansPerform();
                 TriggerFoesPerform();
                 _fighting = false;
             }
@@ -67,7 +74,6 @@ namespace Padrox
             _summonedGuardians[0].DisablePassiveEffects();
             _summonedFoes[0].DisablePassiveEffects();
             _summonedFoes[1].DisablePassiveEffects();
-            _summonedFoes[0].Die();
         }
 
         private void SummonGuardians()
@@ -124,7 +130,7 @@ namespace Padrox
         {
             foreach (BaseGuardian guardian in _summonedGuardians)
             {
-                guardian.Perform(null);
+                guardian.Perform();
             }
         }
 
@@ -132,7 +138,7 @@ namespace Padrox
         {
             foreach (BaseFoe foe in _summonedFoes)
             {
-                foe.Perform(null);
+                foe.Perform();
             }
         }
     }

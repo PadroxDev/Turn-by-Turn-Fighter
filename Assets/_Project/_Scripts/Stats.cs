@@ -30,6 +30,8 @@ namespace Padrox
         
         private int _currentHealth;
 
+        public int Health => _currentHealth;
+
         private void Awake()
         {
             _currentHealth = _maxHealth;
@@ -40,7 +42,6 @@ namespace Padrox
             _currentHealth -= damage;
             if (_currentHealth <= 0)
             {
-                Die();
             }
         }
 
