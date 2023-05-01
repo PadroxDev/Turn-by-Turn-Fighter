@@ -20,7 +20,7 @@ namespace Padrox
         public Transform[] _guardianSlots;
         private Transform[] _foeSlots;
 
-        private List<BaseGuardian> _summonedGuardians;
+        private List<IGuardian> _summonedGuardians;
         private List<BaseFoe> _summonedFoes;
         private bool _fighting = true;
 
@@ -29,7 +29,7 @@ namespace Padrox
             _guardianSlots = _guardianSlotsHolder.GetComponentsInChildren<Transform>().Where(slot => slot != _guardianSlotsHolder).ToArray();
             _foeSlots = _foeSlotsHolder.GetComponentsInChildren<Transform>().Where(slot => slot != _foeSlotsHolder).ToArray();
 
-            _summonedGuardians = new List<BaseGuardian>();
+            _summonedGuardians = new List<IGuardian>();
             _summonedFoes = new List<BaseFoe>();
         }
 
@@ -67,6 +67,7 @@ namespace Padrox
             _summonedGuardians[0].DisablePassiveEffects();
             _summonedFoes[0].DisablePassiveEffects();
             _summonedFoes[1].DisablePassiveEffects();
+            _summonedGuardians[0].Die();
             _summonedFoes[0].Die();
         }
 
@@ -81,7 +82,7 @@ namespace Padrox
                 Debug.LogError("Encountered an error while instantiating the guardian!");
             }
 
-            BaseGuardian i_guardian = guardian.GetComponent<BaseGuardian>();
+            IGuardian i_guardian = guardian.GetComponent<IGuardian>();
             i_guardian.Init();
 
             _summonedGuardians.Add(i_guardian);
@@ -106,7 +107,7 @@ namespace Padrox
 
         private void EnableGuardiansPassiveEffects()
         {
-            foreach (BaseGuardian guardian in _summonedGuardians)
+            foreach (IGuardian guardian in _summonedGuardians)
             {
                 guardian.EnablePassiveEffects();
             }
@@ -122,7 +123,7 @@ namespace Padrox
 
         private void TriggerGuardiansPerform()
         {
-            foreach (BaseGuardian guardian in _summonedGuardians)
+            foreach (IGuardian guardian in _summonedGuardians)
             {
                 guardian.Perform(null);
             }

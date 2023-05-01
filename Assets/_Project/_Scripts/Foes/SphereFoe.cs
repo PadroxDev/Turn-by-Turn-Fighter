@@ -7,6 +7,10 @@ namespace Padrox
         public override void Init()
         {
             base.Init();
+            Damage _initDamage = new Damage();
+            _initDamage.amount = 200;
+            _initDamage.type = DamageType.Physical;
+            stats.ReceiveDamage(_initDamage);
         }
 
         public override void EnablePassiveEffects()
