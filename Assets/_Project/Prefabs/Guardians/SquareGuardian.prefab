@@ -46,6 +46,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d187edbc9d0ab4c8090a66fa49108b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stats: {fileID: 0}
+  attackPhcFactor: 500
 --- !u!114 &6978927753563459243
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64,6 +66,7 @@ MonoBehaviour:
   _power: 5
   _armor: 50
   _magicCloak: 50
+  ElapsedSpeed: 0
 --- !u!1 &7991967106277924928
 GameObject:
   m_ObjectHideFlags: 0

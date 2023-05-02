@@ -19,6 +19,8 @@ namespace Padrox
         [SerializeField] private int _armor = 30;
         [SerializeField] private int _magicCloak = 30;
 
+        [HideInInspector] public float ElapsedSpeed = 0;
+
         // Getters
         public float ActionSpeed => _actionSpeed;
         public float Power => _power;

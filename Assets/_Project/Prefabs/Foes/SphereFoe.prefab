@@ -129,6 +129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 332f9ac2e43994a459d78e679e4c84e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stats: {fileID: 0}
 --- !u!114 &-7348422768098038814
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -142,8 +143,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxHealth: 100
-  _actionSpeed: 10
+  _actionSpeed: 1
   _type: 0
   _power: 1
   _armor: 30
   _magicCloak: 30
+  ElapsedSpeed: 0
